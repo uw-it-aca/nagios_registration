@@ -47,6 +47,9 @@ coverage.xml
 # Django stuff:
 *.log
 
+# vim...
+*.swp
+
 # Sphinx documentation
 docs/_build/
 
@@ -59,4 +62,5 @@ include/
 local/
 project/
 manage.py
+db.sqlite3
 
