@@ -14,4 +14,8 @@ class HostGroup(models.Model):
 
 
 class Service(models.Model):
-    pass
+    base_service = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, db_index=True)
+    contact_groups = models.CharField(max_length=200, null=True)
+    hosts = models.ManyToManyField(Host)
+    check_command = models.CharField(max_length=500)

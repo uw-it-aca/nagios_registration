@@ -1,4 +1,4 @@
-from nagios_registration.models import Host, HostGroup
+from nagios_registration.models import Host, HostGroup, Service
 
 
 def generate_configuration():
@@ -24,7 +24,37 @@ def generate_configuration():
     for hostgroup in hostgroups:
         configuration += get_hostgroup_definition(hostgroup)
 
+    for service in Service.objects.all():
+        configuration += get_service_definition(service)
+
     return configuration
+
+
+def get_service_definition(service):
+    if not filter(lambda x: x.is_active, service.hosts.all()):
+        return ""
+    definition = """
+define service {
+    use                 %s
+    host_name           %s
+    service_description %s
+    check_command       %s
+""" % (
+        service.base_service,
+        ", ".join(
+            map(lambda x: x.name, filter(
+                lambda x: x.is_active, service.hosts.all()))),
+        service.description,
+        service.check_command
+        )
+
+    if service.contact_groups:
+        definition += "    contact_groups      %s\n" % service.contact_groups
+
+    definition += """}
+"""
+
+    return definition
 
 
 def get_host_definition(host):

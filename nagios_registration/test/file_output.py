@@ -1,6 +1,6 @@
 from django.test import TestCase
 from nagios_registration.util import generate_configuration, get_base_host
-from nagios_registration.models import Host, HostGroup
+from nagios_registration.models import Host, HostGroup, Service
 
 
 class TestFile(TestCase):
@@ -63,3 +63,48 @@ class TestFile(TestCase):
 
         group1.delete()
         group2.delete()
+
+    def test_service_definition(self):
+        host1 = Host.objects.create(is_active=True, name="f1", address="a1")
+        host2 = Host.objects.create(is_active=True, name="f2", address="a2")
+
+        service = Service.objects.create(base_service="active-service",
+                                         description="Disk Usage",
+                                         check_command="check.pl!5!8"
+                                         )
+
+        service.hosts.add(host1, host2)
+
+        self.assertRegexpMatches(
+            generate_configuration(),
+            r"service {\s+use\s+active-service\s+host_name\s+f1, f2")
+
+        self.assertRegexpMatches(
+            generate_configuration(),
+            r"service {[^}]+service_description\s+Disk Usage")
+
+        self.assertRegexpMatches(
+            generate_configuration(),
+            r"service {[^}]+check_command\s+check.pl!5!8")
+
+        self.assertNotRegexpMatches(
+            generate_configuration(),
+            r"service {[^}]+contact_groups\s+")
+
+        service.contact_groups = "custom_recipients"
+        service.save()
+
+        self.assertRegexpMatches(
+            generate_configuration(),
+            r"service {[^}]+contact_groups\s+custom_recipients")
+
+        host1.is_active = False
+        host1.save()
+
+        self.assertNotRegexpMatches(
+            generate_configuration(),
+            r"service {\s+use\s+active-service\s+host_name\s+f1, f2")
+
+        self.assertRegexpMatches(
+            generate_configuration(),
+            r"service {\s+use\s+active-service\s+host_name\s+f2")
