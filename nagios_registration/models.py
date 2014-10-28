@@ -12,5 +12,6 @@ class HostGroup(models.Model):
     alias = models.CharField(max_length=200)
     hosts = models.ManyToManyField(Host)
 
+
 class Service(models.Model):
     pass
