@@ -1,0 +1,10 @@
+{% load templatetag_handlebars %}
+{% tplhandlebars "host_list_template" %}
+
+<ul>
+{{#each hosts}}
+<li>{{name}}, address: {{ address }} </li>
+{{/each}}
+</ul>
+
+{% endtplhandlebars %}

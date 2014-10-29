@@ -1,0 +1,13 @@
+Hosts:
+<div id="hosts">
+Loading...
+</div>
+
+{% include "handlebars/host_list.html" %}
+
+<script>
+    var base_url = "{{ base_url }}";
+</script>
+<script src="{{STATIC_URL}}js/vendor/jquery-2.1.1.min.js"></script>
+<script src="{{STATIC_URL}}js/vendor/handlebars-v2.0.0.js"></script>
+<script src="{{STATIC_URL}}js/hosts.js"></script>

@@ -6,6 +6,12 @@ class Host(models.Model):
     address = models.CharField(max_length=200, db_index=True)
     is_active = models.BooleanField(default=True)
 
+    def json_data(self):
+        return {
+            "name": self.name,
+            "address": self.address,
+        }
+
 
 class HostGroup(models.Model):
     name = models.CharField(max_length=200, db_index=True)
