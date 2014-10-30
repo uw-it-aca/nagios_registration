@@ -1,4 +1,5 @@
 from django.shortcuts import render, render_to_response
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -6,8 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from nagios_registration.models import Host, HostGroup, Service
 from nagios_registration.auth import authenticate_application
+from nagios_registration.util import generate_configuration
 import json
 from oauth_provider.decorators import oauth_required
+import os
 
 
 ###
@@ -15,6 +18,29 @@ from oauth_provider.decorators import oauth_required
 # api methods
 #
 ###
+@csrf_exempt
+@authenticate_application
+def deploy(request):
+    if request.method == "POST":
+        if not hasattr(settings, "NAGIOS_CONFIGURATION_FILE"):
+            response = HttpResponse("Missing setting: NAGIOS_CONFIGURATION_FILE")
+            response.status = 500
+            return response
+
+        if not hasattr(settings, "NAGIOS_RESTART_COMMAND"):
+            response = HttpResponse("Missing setting: NAGIOS_RESTART_COMMAND")
+            response.status = 500
+            return response
+
+        configuration = generate_configuration()
+        f = open(settings.NAGIOS_CONFIGURATION_FILE, "w")
+        f.write(configuration)
+        f.close()
+
+        os.system(settings.NAGIOS_RESTART_COMMAND)
+
+        return HttpResponse("OK")
+
 @csrf_exempt
 @authenticate_application
 def host(request):

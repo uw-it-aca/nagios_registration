@@ -6,6 +6,7 @@ urlpatterns = patterns(
     url('^api/v1/host$', views.host),
     url('^api/v1/hostgroup$', views.host_group),
     url('^api/v1/service$', views.service),
+    url('^api/v1/deploy$', views.deploy),
     url('^ui/api/v1/data', views.ui_data),
     url('^ui', views.home, name="nagios_registration_home"),
     url('', 'redirect_to_home'),
