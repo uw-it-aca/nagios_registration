@@ -72,6 +72,26 @@ def host_group(request):
             return HttpResponse(json.dumps(new_group.json_data()))
 
         except Exception as ex:
+            print "Err: ", ex
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
+    def _patch(request):
+        try:
+            json_data = json.loads(request.body)
+            hostname = json_data["host"]
+            groupname = json_data["group"]
+
+            group = HostGroup.objects.get(name=groupname)
+            host = Host.objects.get(name=hostname)
+
+            group.hosts.add(host)
+
+            return HttpResponse("")
+
+        except Exception as ex:
+            print "Err: ", ex
             response = HttpResponse(ex)
             response.status_code = 500
             return response
@@ -81,6 +101,9 @@ def host_group(request):
 
     if request.method == "POST":
         return _post(request)
+
+    if request.method == "PATCH":
+        return _patch(request)
 
 
 ###
