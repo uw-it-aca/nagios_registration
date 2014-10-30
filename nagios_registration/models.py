@@ -27,7 +27,16 @@ class HostGroup(models.Model):
 
 class Service(models.Model):
     base_service = models.CharField(max_length=200)
-    description = models.CharField(max_length=200, db_index=True)
+    description = models.CharField(max_length=200, db_index=True, unique=True)
     contact_groups = models.CharField(max_length=200, null=True)
     hosts = models.ManyToManyField(Host)
     check_command = models.CharField(max_length=500)
+
+    def json_data(self):
+        return {
+            "base_service": self.base_service,
+            "description": self.description,
+            "contact_groups": self.contact_groups,
+            "check_command": self.check_command,
+        }
+
