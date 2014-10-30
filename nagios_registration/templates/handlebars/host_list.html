@@ -3,7 +3,24 @@
 
 <ul>
 {{#each hosts}}
-<li>{{name}}, address: {{ address }} </li>
+<li>{{name}}, address: {{ address }}
+    <br>
+    Services:
+    <ul>
+        {{#each services}}
+            <li>{{ description }}
+                <br>{{ base_service }}, {{ check_command }}, {{ contact_groups }}
+            </li>
+        {{/each}}
+    </ul>
+    <br >
+    Host Groups:
+    <ul>
+        {{#each host_groups}}
+            <li>{{ alias }} ({{ name }})</li>
+        {{/each}}
+    </ul>
+</li>
 {{/each}}
 </ul>
 

@@ -195,6 +195,18 @@ def ui_data(request):
 
     host_list = []
     for host in hosts:
-        host_list.append(host.json_data())
+        host_data = host.json_data()
+        host_data["services"] = []
+        host_data["host_groups"] = []
+
+        services = Service.objects.filter(hosts=host)
+        for service in services:
+            host_data["services"].append(service.json_data())
+
+        groups = HostGroup.objects.filter(hosts=host)
+        for group in groups:
+            host_data["host_groups"].append(group.json_data())
+
+        host_list.append(host_data)
 
     return HttpResponse(json.dumps(host_list), content_type="application/json")
