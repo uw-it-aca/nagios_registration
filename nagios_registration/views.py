@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from nagios_registration.models import Host
+from nagios_registration.models import Host, HostGroup
 from nagios_registration.auth import authenticate_application
 import json
 from oauth_provider.decorators import oauth_required
@@ -18,23 +18,22 @@ from oauth_provider.decorators import oauth_required
 @csrf_exempt
 @authenticate_application
 def host(request):
-    hosts = Host.objects.filter(is_active=True)
-
     def _get(request):
+        hosts = Host.objects.filter(is_active=True)
         host_list = []
         for host in hosts:
             host_list.append(host.json_data())
 
-        return HttpResponse(json.dumps(host_list), content_type="application/json")
+        return HttpResponse(json.dumps(host_list),
+                            content_type="application/json")
 
     def _post(request):
         try:
             json_data = json.loads(request.body)
 
-            new_host = Host.objects.create(
-                                            name = json_data["name"],
-                                            address = json_data["address"],
-                                          )
+            new_host = Host.objects.create(name=json_data["name"],
+                                           address=json_data["address"],
+                                           )
 
             return HttpResponse(json.dumps(new_host.json_data()))
 
@@ -48,6 +47,41 @@ def host(request):
 
     if request.method == "POST":
         return _post(request)
+
+
+@csrf_exempt
+@authenticate_application
+def host_group(request):
+    def _get(request):
+        hostgroups = HostGroup.objects.all()
+        hostgroup_list = []
+        for group in hostgroups:
+            hostgroup_list.append(group.json_data())
+
+        return HttpResponse(json.dumps(hostgroup_list),
+                            content_type="application/json")
+
+    def _post(request):
+        try:
+            json_data = json.loads(request.body)
+
+            new_group = HostGroup.objects.create(name=json_data["name"],
+                                                 alias=json_data["alias"],
+                                                 )
+
+            return HttpResponse(json.dumps(new_group.json_data()))
+
+        except Exception as ex:
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
+    if request.method == "GET":
+        return _get(request)
+
+    if request.method == "POST":
+        return _post(request)
+
 
 ###
 #

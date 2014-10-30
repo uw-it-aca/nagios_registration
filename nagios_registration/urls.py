@@ -3,7 +3,8 @@ import nagios_registration.views as views
 
 urlpatterns = patterns(
     'nagios_registration.views',
-    url('^api/v1/host', views.host),
+    url('^api/v1/host$', views.host),
+    url('^api/v1/hostgroup$', views.host_group),
     url('^ui/api/v1/data', views.ui_data),
     url('^ui', views.home, name="nagios_registration_home"),
     url('', 'redirect_to_home'),

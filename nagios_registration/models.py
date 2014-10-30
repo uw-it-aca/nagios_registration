@@ -14,9 +14,15 @@ class Host(models.Model):
 
 
 class HostGroup(models.Model):
-    name = models.CharField(max_length=200, db_index=True)
+    name = models.CharField(max_length=200, db_index=True, unique=True)
     alias = models.CharField(max_length=200)
     hosts = models.ManyToManyField(Host)
+
+    def json_data(self):
+        return {
+            "name": self.name,
+            "alias": self.alias,
+        }
 
 
 class Service(models.Model):

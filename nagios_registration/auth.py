@@ -18,6 +18,7 @@ def authenticate_application(func):
             request.META['OAUTH_CONSUMER_PK'] = consumer.pk
             return func(*args, **kwargs)
         except Exception as e:
+            print "Error: ", e
             response = HttpResponse("Error authorizing application")
             response.status_code = 401
         return response
