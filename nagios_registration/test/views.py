@@ -1,6 +1,6 @@
 from django.test import TestCase
 from oauth_provider.models import Consumer
-from nagios_registration.models import Host, HostGroup
+from nagios_registration.models import Host, HostGroup, Service
 import json
 import hashlib
 import time
@@ -82,3 +82,50 @@ class TestViews(TestCase):
         host.delete()
 
         hostgroup.delete()
+
+    def test_service(self):
+        response = self.client.get("/api/v1/service")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, '[]')
+
+        response = self.client.post("/api/v1/service",
+                                    json.dumps({
+                                        "base_service": "24x7",
+                                        "description": "test service",
+                                        "check_command": "!!something.py!80",
+                                        "contact_groups": "admins, yousall",
+                                    }),
+                                    content_type="application/json",
+                                    )
+
+        self.assertEquals(response.status_code, 201)
+
+        response = self.client.get("/api/v1/service")
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["base_service"], "24x7")
+        self.assertEquals(data[0]["description"], "test service")
+        self.assertEquals(data[0]["check_command"], "!!something.py!80")
+        self.assertEquals(data[0]["contact_groups"], "admins, yousall")
+
+        host = Host.objects.create(name="member", address="address")
+
+        response = self.client.patch("/api/v1/service",
+                                     json.dumps({
+                                        "service": "test service",
+                                        "host": "member",
+                                     }))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "")
+
+        service = Service.objects.get(description="test service")
+        self.assertEquals(len(service.hosts.all()), 1)
+        self.assertEquals(service.hosts.all()[0].name, "member")
+
+        host.delete()
+
+        service.delete()
+

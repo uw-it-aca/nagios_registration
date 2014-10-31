@@ -142,7 +142,7 @@ def host_group(request):
 @authenticate_application
 def service(request):
     def _get(request):
-        services = Services.objects.all()
+        services = Service.objects.all()
         services_list = []
         for service in services:
             services_list.append(service.json_data())
