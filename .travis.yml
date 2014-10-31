@@ -11,7 +11,8 @@ before_script:
   - cp travis-ci/manage.py manage.py
   - python manage.py syncdb --noinput
   - python manage.py migrate
+script:
   - pep8 --exclude=migrations nagios_registration/
-script: coverage run --include=nagios_registration/* manage.py test nagios_registration
+  - coverage run --include=nagios_registration/* manage.py test nagios_registration
 after_success:
   - coveralls
