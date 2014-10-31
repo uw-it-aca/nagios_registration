@@ -1,6 +1,8 @@
 from django.test import TestCase
+from django.test.utils import override_settings
 from oauth_provider.models import Consumer
 from nagios_registration.models import Host, HostGroup, Service
+from tempfile import NamedTemporaryFile
 import json
 import hashlib
 import time
@@ -113,10 +115,9 @@ class TestViews(TestCase):
         host = Host.objects.create(name="member", address="address")
 
         response = self.client.patch("/api/v1/service",
-                                     json.dumps({
-                                        "service": "test service",
-                                        "host": "member",
-                                     }))
+                                     json.dumps({"service": "test service",
+                                                 "host": "member",
+                                                 }))
 
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response.content, "")
@@ -129,3 +130,15 @@ class TestViews(TestCase):
 
         service.delete()
 
+    @override_settings(NAGIOS_RESTART_COMMAND="")
+    def test_deploy(self):
+        f = NamedTemporaryFile()
+
+        with self.settings(NAGIOS_CONFIGURATION_FILE=f.name):
+            response = self.client.post("/api/v1/deploy")
+            self.assertEquals(response.status_code, 200)
+            self.assertEquals(response.content, "OK")
+
+            file_content = f.read()
+
+            self.assertGreater(len(file_content), 500)
