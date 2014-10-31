@@ -14,5 +14,5 @@ before_script:
 script:
   - pep8 --exclude=migrations nagios_registration/
   - coverage run --include=nagios_registration/* manage.py test nagios_registration
-after_success:
+after_script:
   - coveralls
