@@ -25,12 +25,12 @@ def deploy(request):
         if not hasattr(settings, "NAGIOS_CONFIGURATION_FILE"):
             msg = "Missing setting: NAGIOS_CONFIGURATION_FILE"
             response = HttpResponse(msg)
-            response.status = 500
+            response.status_code = 500
             return response
 
         if not hasattr(settings, "NAGIOS_RESTART_COMMAND"):
             response = HttpResponse("Missing setting: NAGIOS_RESTART_COMMAND")
-            response.status = 500
+            response.status_code = 500
             return response
 
         configuration = generate_configuration()
@@ -100,7 +100,7 @@ def host_group(request):
                                                  )
 
             response = HttpResponse(json.dumps(new_group.json_data()))
-            response.status = 201
+            response.status_code = 201
             return response
 
         except Exception as ex:

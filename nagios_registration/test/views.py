@@ -1,5 +1,7 @@
 from django.test import TestCase
 from oauth_provider.models import Consumer
+from nagios_registration.models import Host, HostGroup
+import json
 import hashlib
 import time
 import random
@@ -37,5 +39,46 @@ class TestViews(TestCase):
         response = self.client.get("/api/v1/host")
         self.assertEquals(response.status_code, 200)
 
-        valid_response = '[{"name": "T1", "address": "A1"}]'
-        self.assertEquals(response.content, valid_response)
+        data = json.loads(response.content)
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["name"], "T1")
+        self.assertEquals(data[0]["address"], "A1")
+
+        host = Host.objects.get(name="T1")
+        host.delete()
+
+    def test_host_group(self):
+        response = self.client.get("/api/v1/hostgroup")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, '[]')
+
+        response = self.client.post("/api/v1/hostgroup",
+                                    '{ "name": "HG1", "alias": "HG1_alias" }',
+                                    content_type="application/json",
+                                    )
+
+        self.assertEquals(response.status_code, 201)
+
+        response = self.client.get("/api/v1/hostgroup")
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["name"], "HG1")
+        self.assertEquals(data[0]["alias"], "HG1_alias")
+
+        host = Host.objects.create(name="member", address="address")
+
+        response = self.client.patch("/api/v1/hostgroup",
+                                     '{ "group": "HG1", "host": "member" }')
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "")
+
+        hostgroup = HostGroup.objects.get(name="HG1")
+        self.assertEquals(len(hostgroup.hosts.all()), 1)
+        self.assertEquals(hostgroup.hosts.all()[0].name, "member")
+
+        host.delete()
+
+        hostgroup.delete()

@@ -59,9 +59,9 @@ AUTHENTICATION_BACKENDS = (
 #    'django.contrib.auth.backends.ModelBackend',
 )
 
-ROOT_URLCONF = 'project.urls'
+ROOT_URLCONF = 'travis-ci.urls'
 
-WSGI_APPLICATION = 'project.wsgi.application'
+WSGI_APPLICATION = 'travis-ci.wsgi.application'
 
 
 # Database
