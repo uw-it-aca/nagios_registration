@@ -6,8 +6,6 @@ before_script:
   - pip install coverage
   - pip install python-coveralls
   - pip install pep8
-  - ls -l
-  - ls -l travis-ci
   - cp travis-ci/manage.py manage.py
   - python manage.py syncdb --noinput
   - python manage.py migrate
