@@ -4,4 +4,11 @@
 nagios_registration
 ===================
 
-An app for having servers self-register with nagios.
+If you have a large number of servers you manage through a deployment system (such as Ansible, Puppet, or whatnot), and you want to use Nagios to monitor them, this app can help you.  Nagios Registration supports:
+
+* Adding new hosts programatically
+* Creating and managing host groups
+* Adding services
+* Assigning services to hosts
+
+For installation information, [read this](https://github.com/vegitron/nagios_registration/wiki/Installation).  For information about how this app interacts with the rest of your Nagios infrastructur, [read this](https://github.com/vegitron/nagios_registration/wiki/Nagios-Configuration-Files)
