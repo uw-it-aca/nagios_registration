@@ -108,3 +108,14 @@ class TestFile(TestCase):
         self.assertRegexpMatches(
             generate_configuration(),
             r"service {\s+use\s+active-service\s+host_name\s+f2")
+
+        host2.is_active = False
+        host2.save()
+        self.assertNotRegexpMatches(
+            generate_configuration(),
+            r"service {\s+use\s+active-service\s+host_name\s")
+
+
+        host1.delete()
+        host2.delete()
+        service.delete()
