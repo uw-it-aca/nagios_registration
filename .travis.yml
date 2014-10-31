@@ -5,4 +5,5 @@ install: pip install -r requirements.txt
 before_script:
   - cp nagios_registration/travis-ci/manage.py manage.py
   - python manage.py syncdb -migrate -noinput
+  - ls -l
 script: python manage.py test nagios_registration
