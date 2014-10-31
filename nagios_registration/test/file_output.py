@@ -115,7 +115,6 @@ class TestFile(TestCase):
             generate_configuration(),
             r"service {\s+use\s+active-service\s+host_name\s")
 
-
         host1.delete()
         host2.delete()
         service.delete()

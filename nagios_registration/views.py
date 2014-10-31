@@ -23,7 +23,8 @@ import os
 def deploy(request):
     if request.method == "POST":
         if not hasattr(settings, "NAGIOS_CONFIGURATION_FILE"):
-            response = HttpResponse("Missing setting: NAGIOS_CONFIGURATION_FILE")
+            msg = "Missing setting: NAGIOS_CONFIGURATION_FILE"
+            response = HttpResponse(msg)
             response.status = 500
             return response
 
@@ -40,6 +41,7 @@ def deploy(request):
         os.system(settings.NAGIOS_RESTART_COMMAND)
 
         return HttpResponse("OK")
+
 
 @csrf_exempt
 @authenticate_application

@@ -39,4 +39,3 @@ class Service(models.Model):
             "contact_groups": self.contact_groups,
             "check_command": self.check_command,
         }
-
