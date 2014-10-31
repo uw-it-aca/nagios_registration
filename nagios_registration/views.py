@@ -63,7 +63,9 @@ def host(request):
                                            address=json_data["address"],
                                            )
 
-            return HttpResponse(json.dumps(new_host.json_data()))
+            response = HttpResponse(json.dumps(new_host.json_data()))
+            response.status_code = 201
+            return response
 
         except Exception as ex:
             response = HttpResponse(ex)
@@ -97,7 +99,9 @@ def host_group(request):
                                                  alias=json_data["alias"],
                                                  )
 
-            return HttpResponse(json.dumps(new_group.json_data()))
+            response = HttpResponse(json.dumps(new_group.json_data()))
+            response.status = 201
+            return response
 
         except Exception as ex:
             print "Err: ", ex
@@ -164,7 +168,9 @@ def service(request):
                                                  check_command=cc,
                                                  )
 
-            return HttpResponse(json.dumps(new_service.json_data()))
+            response = HttpResponse(json.dumps(new_service.json_data()))
+            response.status_code = 201
+            return response
 
         except Exception as ex:
             print "Err: ", ex
