@@ -60,7 +60,7 @@ target/
 bin/
 include/
 local/
-project/
-manage.py
+/project/
+/manage.py
 db.sqlite3
 
