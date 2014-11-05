@@ -14,3 +14,7 @@ script:
   - coverage run --include=nagios_registration/* manage.py test nagios_registration
 after_script:
   - coveralls
+notifications:
+  webhooks:
+      urls:
+        - http://vegitron.s.uw.edu/sol/rest/botalyst/v1/travis-ci
