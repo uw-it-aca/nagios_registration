@@ -122,11 +122,9 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertEquals(response.content, "")
 
-
         response = self.client.patch("/api/v1/service", "bad_data")
 
         self.assertEquals(response.status_code, 500)
-
 
         service = Service.objects.get(description="test service")
         self.assertEquals(len(service.hosts.all()), 1)
