@@ -17,4 +17,4 @@ after_script:
 notifications:
   webhooks:
       urls:
-        - http://vegitron.s.uw.edu/sol/rest/botalyst/v1/travis-ci
+        - https://yarn.cac.washington.edu/rest/botalyst/v1/travis-ci
