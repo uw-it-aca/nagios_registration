@@ -1,3 +1,4 @@
 Django>=1.7
 django-oauth-plus
 django-templatetag-handlebars==1.2.0
+compressor
