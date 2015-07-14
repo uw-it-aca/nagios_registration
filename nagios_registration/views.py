@@ -96,10 +96,12 @@ def host_group(request):
     def _post(request):
         try:
             json_data = json.loads(request.body)
+            name = json_data["name"]
+            alias = json_data["alias"]
 
-            new_group = HostGroup.objects.create(name=json_data["name"],
-                                                 alias=json_data["alias"],
-                                                 )
+            new_group, created = HostGroup.objects.get_or_create(name=name,
+                                                                 alias=alias,
+                                                                 )
 
             response = HttpResponse(json.dumps(new_group.json_data()))
             response.status_code = 201
