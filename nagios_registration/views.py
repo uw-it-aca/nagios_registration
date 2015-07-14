@@ -58,10 +58,12 @@ def host(request):
     def _post(request):
         try:
             json_data = json.loads(request.body)
+            name = json_data["name"]
+            address = json_data["address"]
 
-            new_host = Host.objects.create(name=json_data["name"],
-                                           address=json_data["address"],
-                                           )
+            new_host, created = Host.objects.get_or_create(name=name,
+                                                           address=address,
+                                                           )
 
             response = HttpResponse(json.dumps(new_host.json_data()))
             response.status_code = 201
