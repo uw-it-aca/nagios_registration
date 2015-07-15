@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from nagios_registration.models import Host, HostGroup, Service
+from nagios_registration.models import Host, HostGroup, Service, ServiceGroup
 from nagios_registration.auth import authenticate_application
 from nagios_registration.util import generate_configuration
 import json
@@ -192,6 +192,67 @@ def service(request):
             host = Host.objects.get(name=hostname)
 
             service.hosts.add(host)
+
+            return HttpResponse("")
+
+        except Exception as ex:
+            print "Err: ", ex
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
+    if request.method == "GET":
+        return _get(request)
+
+    if request.method == "POST":
+        return _post(request)
+
+    if request.method == "PATCH":
+        return _patch(request)
+
+
+@csrf_exempt
+@authenticate_application
+def service_group(request):
+    def _get(request):
+        servicegroups = ServiceGroup.objects.all()
+        servicegroup_list = []
+        for group in servicegroups:
+            servicegroup_list.append(group.json_data())
+
+        return HttpResponse(json.dumps(hostgroup_list),
+                            content_type="application/json")
+
+    def _post(request):
+        try:
+            json_data = json.loads(request.body)
+            name = json_data["name"]
+            alias = json_data["alias"]
+
+            new_group, is_new = ServiceGroup.objects.get_or_create(name=name,
+                                                                   alias=alias,
+                                                                   )
+
+            response = HttpResponse(json.dumps(new_group.json_data()))
+            response.status_code = 201
+            return response
+
+        except Exception as ex:
+            print "Err: ", ex
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
+    def _patch(request):
+        try:
+            json_data = json.loads(request.body)
+            servicename = json_data["service"]
+            groupname = json_data["group"]
+
+            group = ServiceGroup.objects.get(name=groupname)
+            service = Service.objects.get(name=servicename)
+
+            group.hosts.add(service)
 
             return HttpResponse("")
 

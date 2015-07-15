@@ -39,3 +39,15 @@ class Service(models.Model):
             "contact_groups": self.contact_groups,
             "check_command": self.check_command,
         }
+
+
+class ServiceGroup(models.Model):
+    name = models.CharField(max_length=200, db_index=True, unique=True)
+    alias = models.CharField(max_length=200)
+    services = models.ManyToManyField(Service)
+
+    def json_data(self):
+        return {
+            "name": self.name,
+            "alias": self.alias,
+        }
