@@ -99,10 +99,10 @@ define servicegroup {
     members         %s
 }
 """ % (
-        hg.name,
-        hg.alias,
+        sg.name,
+        sg.alias,
         ", ".join(
-            map(lambda x: x.name, hg.services.all())))
+            map(lambda x: x.name, sg.services.all())))
 
 
 def get_base_host():
