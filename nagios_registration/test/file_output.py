@@ -136,7 +136,6 @@ class TestFile(TestCase):
         group2 = ServiceGroup.objects.create(name="disk2",
                                              alias="Disk Services (2)")
 
-
         group1.services.add(service)
         group2.services.add(service)
 
