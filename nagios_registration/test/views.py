@@ -131,6 +131,28 @@ class TestViews(TestCase):
         self.assertEquals(len(service.hosts.all()), 1)
         self.assertEquals(service.hosts.all()[0].name, "member")
 
+        # Test POSTing a different check_command/contact_groups/base_service
+        response = self.client.post("/api/v1/service",
+                                    json.dumps({
+                                        "base_service": "25x8",
+                                        "description": "test service",
+                                        "check_command": "!!something.py!90",
+                                        "contact_groups": "admins",
+                                    }),
+                                    content_type="application/json",
+                                    )
+        self.assertEquals(response.status_code, 201)
+
+        response = self.client.get("/api/v1/service")
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["base_service"], "25x8")
+        self.assertEquals(data[0]["description"], "test service")
+        self.assertEquals(data[0]["check_command"], "!!something.py!90")
+        self.assertEquals(data[0]["contact_groups"], "admins")
+
         host.delete()
 
         service.delete()

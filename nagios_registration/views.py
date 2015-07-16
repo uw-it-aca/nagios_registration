@@ -167,13 +167,20 @@ def service(request):
             if "contact_groups" in json_data:
                 cg = json_data["contact_groups"]
 
-            new_service, new = Service.objects.get_or_create(base_service=bs,
-                                                             description=desc,
-                                                             contact_groups=cg,
-                                                             check_command=cc,
-                                                             )
+            try:
+                service = Service.objects.get(description=desc)
+                service.base_service = bs
+                service.contact_groups = cg
+                service.check_command = cc
+                service.save()
+            except Service.DoesNotExist:
+                service = Service.objects.create(base_service=bs,
+                                                 description=desc,
+                                                 contact_groups=cg,
+                                                 check_command=cc,
+                                                 )
 
-            response = HttpResponse(json.dumps(new_service.json_data()))
+            response = HttpResponse(json.dumps(service.json_data()))
             response.status_code = 201
             return response
 
