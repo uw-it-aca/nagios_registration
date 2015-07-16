@@ -102,7 +102,7 @@ define servicegroup {
         sg.name,
         sg.alias,
         ", ".join(
-            map(lambda x: x.name, sg.services.all())))
+            map(lambda x: x.description, sg.services.all())))
 
 
 def get_base_host():
