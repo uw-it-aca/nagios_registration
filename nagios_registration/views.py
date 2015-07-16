@@ -250,7 +250,7 @@ def service_group(request):
             groupname = json_data["group"]
 
             group = ServiceGroup.objects.get(name=groupname)
-            service = Service.objects.get(name=servicename)
+            service = Service.objects.get(description=servicename)
 
             group.hosts.add(service)
 
