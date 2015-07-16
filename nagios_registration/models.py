@@ -4,12 +4,14 @@ from django.db import models
 class Host(models.Model):
     name = models.CharField(max_length=200, db_index=True, unique=True)
     address = models.CharField(max_length=200, db_index=True, unique=True)
+    contact_groups = models.CharField(max_length=200, null=True)
     is_active = models.BooleanField(default=True)
 
     def json_data(self):
         return {
             "name": self.name,
             "address": self.address,
+            "contact_groups": self.contact_groups,
         }
 
 

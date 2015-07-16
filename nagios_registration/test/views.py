@@ -33,7 +33,8 @@ class TestViews(TestCase):
         self.assertEquals(response.content, '[]')
 
         response = self.client.post("/api/v1/host",
-                                    '{ "name": "T1", "address": "A1" }',
+                                    ('{ "name": "T1", "address": "A1", '
+                                     '"contact_groups": "cg1, cg2" }'),
                                     content_type="application/json",
                                     )
 
@@ -46,6 +47,24 @@ class TestViews(TestCase):
         self.assertEquals(len(data), 1)
         self.assertEquals(data[0]["name"], "T1")
         self.assertEquals(data[0]["address"], "A1")
+        self.assertEquals(data[0]["contact_groups"], "cg1, cg2")
+
+        response = self.client.post("/api/v1/host",
+                                    ('{ "name": "T1", "address": "A1", '
+                                     '"contact_groups": "cg1" }'),
+                                    content_type="application/json",
+                                    )
+
+        self.assertEquals(response.status_code, 201)
+
+        response = self.client.get("/api/v1/host")
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["name"], "T1")
+        self.assertEquals(data[0]["address"], "A1")
+        self.assertEquals(data[0]["contact_groups"], "cg1")
 
         host = Host.objects.get(name="T1")
         host.delete()

@@ -61,12 +61,20 @@ def host(request):
             json_data = json.loads(request.body)
             name = json_data["name"]
             address = json_data["address"]
+            contact_groups = json_data["contact_groups"]
 
-            new_host, created = Host.objects.get_or_create(name=name,
-                                                           address=address,
-                                                           )
+            try:
+                host = Host.objects.get(name=name)
+                host.address = address
+                host.contact_groups = contact_groups
+                host.save()
+            except Host.DoesNotExist:
+                host = Host.objects.create(name=name,
+                                           address=address,
+                                           contact_groups=contact_groups,
+                                           )
 
-            response = HttpResponse(json.dumps(new_host.json_data()))
+            response = HttpResponse(json.dumps(host.json_data()))
             response.status_code = 201
             return response
 

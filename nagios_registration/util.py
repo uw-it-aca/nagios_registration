@@ -73,13 +73,21 @@ define service {
 
 
 def get_host_definition(host):
-    return """
+    definition = """
 define host {
     use         _nr_base_host_definition
     host_name   %s
     address     %s
-}
 """ % (host.name, host.address)
+
+    if host.contact_groups:
+        definition += """
+    contact_groups  %s
+""" % host.contact_groups
+
+    definition += "}"
+
+    return definition
 
 
 def get_hostgroup_definition(hg):

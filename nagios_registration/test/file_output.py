@@ -12,11 +12,19 @@ class TestFile(TestCase):
         host = Host.objects.create(
             is_active=True,
             name="find_me",
-            address="127.7.2.1")
+            address="127.7.2.1"
+            )
 
         self.assertRegexpMatches(
             generate_configuration(),
-            r"host_name\s+find_me\s+address\s+127.7.2.1")
+            r"host_name\s+find_me\s+address\s+127.7.2.1\s+}")
+
+        host.contact_groups = "g1, g2"
+        host.save()
+        self.assertRegexpMatches(
+            generate_configuration(),
+            (r"host_name\s+find_me\s+address\s+127.7.2.1\s+"
+             "contact_groups\s+g1, g2\s+}"))
 
         host.is_active = False
         host.save()
