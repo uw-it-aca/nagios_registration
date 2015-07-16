@@ -54,6 +54,11 @@ define service {
     if service.contact_groups:
         definition += "    contact_groups      %s\n" % service.contact_groups
 
+    groups = ServiceGroup.objects.filter(services__id=service.pk)
+    if groups:
+        name_list = list(map(lambda x: x.name, groups))
+        definition += "    servicegroups      %s\n" % (", ".join(name_list))
+
     definition += """}
 """
 
@@ -96,13 +101,11 @@ def get_servicegroup_definition(sg):
 define servicegroup {
     servicegroup_name  %s
     alias           %s
-    members         %s
 }
 """ % (
         sg.name,
         sg.alias,
-        ", ".join(
-            map(lambda x: x.description, sg.services.all())))
+        )
 
 
 def get_base_host():

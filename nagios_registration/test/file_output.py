@@ -1,6 +1,6 @@
 from django.test import TestCase
 from nagios_registration.util import generate_configuration, get_base_host
-from nagios_registration.models import Host, HostGroup, Service
+from nagios_registration.models import Host, HostGroup, Service, ServiceGroup
 
 
 class TestFile(TestCase):
@@ -118,3 +118,34 @@ class TestFile(TestCase):
         host1.delete()
         host2.delete()
         service.delete()
+
+    def test_servicegroups(self):
+        host1 = Host.objects.create(is_active=True, name="f1", address="a1")
+        host2 = Host.objects.create(is_active=True, name="f2", address="a2")
+
+        service = Service.objects.create(base_service="active-service",
+                                         description="Disk Usage",
+                                         check_command="check.pl!5!8"
+                                         )
+
+        service.hosts.add(host1, host2)
+
+        group1 = ServiceGroup.objects.create(name="disk",
+                                             alias="Disk Services")
+
+        group2 = ServiceGroup.objects.create(name="disk2",
+                                             alias="Disk Services (2)")
+
+
+        group1.services.add(service)
+        group2.services.add(service)
+
+        config = generate_configuration()
+
+        self.assertRegexpMatches(
+            config,
+            r"servicegroup {\s+servicegroup_name\s+disk2")
+
+        self.assertRegexpMatches(
+            config,
+            r"servicegroups\s+disk, disk2")
