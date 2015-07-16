@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from nagios_registration.models import Host, HostGroup, Service, ServiceGroup
+from nagios_registration.models import Contact, ContactGroup
 from nagios_registration.auth import authenticate_application
 from nagios_registration.util import generate_configuration
 import json
@@ -220,7 +221,7 @@ def service_group(request):
         for group in servicegroups:
             servicegroup_list.append(group.json_data())
 
-        return HttpResponse(json.dumps(hostgroup_list),
+        return HttpResponse(json.dumps(servicegroup_list),
                             content_type="application/json")
 
     def _post(request):
@@ -253,6 +254,104 @@ def service_group(request):
             service = Service.objects.get(description=servicename)
 
             group.services.add(service)
+
+            return HttpResponse("")
+
+        except Exception as ex:
+            print "Err: ", ex
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
+    if request.method == "GET":
+        return _get(request)
+
+    if request.method == "POST":
+        return _post(request)
+
+    if request.method == "PATCH":
+        return _patch(request)
+
+
+@csrf_exempt
+@authenticate_application
+def contact(request):
+    def _get(request):
+        contacts = Contact.objects.all()
+        contacts_list = []
+        for contact in contacts:
+            contacts_list.append(contact.json_data())
+
+        return HttpResponse(json.dumps(contacts_list),
+                            content_type="application/json")
+
+    def _post(request):
+        try:
+            json_data = json.loads(request.body)
+
+            name = json_data["name"]
+            email = json_data["email"]
+
+            new_contact, new = Contact.objects.get_or_create(name=name,
+                                                             email=email,
+                                                             )
+
+            response = HttpResponse(json.dumps(new_contact.json_data()))
+            response.status_code = 201
+            return response
+
+        except Exception as ex:
+            print "Err: ", ex
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
+    if request.method == "GET":
+        return _get(request)
+
+    if request.method == "POST":
+        return _post(request)
+
+
+@csrf_exempt
+@authenticate_application
+def contact_group(request):
+    def _get(request):
+        contactgroups = ContactGroup.objects.all()
+        contactgroup_list = []
+        for group in contactgroups:
+            contactgroup_list.append(group.json_data())
+
+        return HttpResponse(json.dumps(contactgroup_list),
+                            content_type="application/json")
+
+    def _post(request):
+        try:
+            json_data = json.loads(request.body)
+            name = json_data["name"]
+
+            new_group, is_new = ContactGroup.objects.get_or_create(name=name)
+
+            response = HttpResponse(json.dumps(new_group.json_data()))
+            response.status_code = 201
+            return response
+
+        except Exception as ex:
+            print "Err: ", ex
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
+    def _patch(request):
+        try:
+            json_data = json.loads(request.body)
+            contactname = json_data["contact"]
+            groupname = json_data["group"]
+
+            group = ContactGroup.objects.get(name=groupname)
+            contact = Contact.objects.get(name=contactname)
+
+            group.members.add(contact)
 
             return HttpResponse("")
 

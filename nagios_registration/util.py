@@ -1,4 +1,5 @@
 from nagios_registration.models import Host, HostGroup, Service, ServiceGroup
+from nagios_registration.models import ContactGroup, Contact
 
 
 def generate_configuration():
@@ -29,6 +30,12 @@ def generate_configuration():
 
     for servicegroup in ServiceGroup.objects.all():
         configuration += get_servicegroup_definition(servicegroup)
+
+    for contact in Contact.objects.all():
+        configuration += get_contact_definition(contact)
+
+    for group in ContactGroup.objects.all():
+        configuration += get_contactgroup_definition(group)
 
     return configuration
 
@@ -106,6 +113,33 @@ define servicegroup {
         sg.name,
         sg.alias,
         )
+
+
+def get_contact_definition(contact):
+    return """
+define contact {
+    contact_name    %s
+    email           %s
+    service_notification_period     24x7
+    host_notification_period        24x7
+    service_notification_options    w,u,c,r
+    host_notification_options       d,r,u
+    service_notification_commands   notify-service-by-email
+    host_notification_commands      notify-host-by-email
+}
+""" % (contact.name, contact.email)
+
+
+def get_contactgroup_definition(group):
+    if not group.members.all():
+        return ""
+
+    return """
+define contactgroup {
+    contactgroup_name %s
+    members           %s
+}
+""" % (group.name, ", ".join(map(lambda x: x.name, group.members.all())))
 
 
 def get_base_host():

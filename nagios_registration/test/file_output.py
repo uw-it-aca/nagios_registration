@@ -1,6 +1,7 @@
 from django.test import TestCase
 from nagios_registration.util import generate_configuration, get_base_host
 from nagios_registration.models import Host, HostGroup, Service, ServiceGroup
+from nagios_registration.models import ContactGroup, Contact
 
 
 class TestFile(TestCase):
@@ -148,3 +149,26 @@ class TestFile(TestCase):
         self.assertRegexpMatches(
             config,
             r"servicegroups\s+disk, disk2")
+
+    def test_contacts(self):
+        contact1 = Contact.objects.create(name="c1", email="c1@example.com")
+        contact2 = Contact.objects.create(name="c2", email="c2@example.com")
+
+        group1 = ContactGroup.objects.create(name="contact_group1")
+        group1.members.add(contact1)
+        group1.members.add(contact2)
+
+        config = generate_configuration()
+
+        self.assertRegexpMatches(
+            config,
+            (r"define contactgroup {\s+contactgroup_name\s+contact_group1\s+"
+             "members\s+c1, c2"))
+
+        self.assertRegexpMatches(
+            config,
+            r"define contact {\s+contact_name\s+c1\s+email\s+c1@example.com")
+
+        self.assertRegexpMatches(
+            config,
+            r"define contact {\s+contact_name\s+c2\s+email\s+c2@example.com")

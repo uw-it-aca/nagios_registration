@@ -51,3 +51,24 @@ class ServiceGroup(models.Model):
             "name": self.name,
             "alias": self.alias,
         }
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length=200, db_index=True, unique=True)
+    email = models.CharField(max_length=200, db_index=True, unique=True)
+
+    def json_data(self):
+        return {
+            "name": self.name,
+            "email": self.email,
+        }
+
+
+class ContactGroup(models.Model):
+    name = models.CharField(max_length=200, db_index=True, unique=True)
+    members = models.ManyToManyField(Contact)
+
+    def json_data(self):
+        return {
+            "name": self.name,
+        }

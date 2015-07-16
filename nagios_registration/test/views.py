@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.test.utils import override_settings
 from oauth_provider.models import Consumer
-from nagios_registration.models import Host, HostGroup, Service
+from nagios_registration.models import Host, HostGroup, Service, ServiceGroup
+from nagios_registration.models import Contact, ContactGroup
 from tempfile import NamedTemporaryFile
 import json
 import hashlib
@@ -133,6 +134,111 @@ class TestViews(TestCase):
         host.delete()
 
         service.delete()
+
+    def test_contact(self):
+        response = self.client.get("/api/v1/contact")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, '[]')
+
+        response = self.client.post("/api/v1/contact",
+                                    json.dumps({
+                                        "name": "contact_rest",
+                                        "email": "cr@example.com",
+                                    }),
+                                    content_type="application/json",
+                                    )
+
+        self.assertEquals(response.status_code, 201)
+
+        response = self.client.get("/api/v1/contact")
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["name"], "contact_rest")
+        self.assertEquals(data[0]["email"], "cr@example.com")
+
+        contact = Contact.objects.get(name="contact_rest")
+        contact.delete()
+
+    def test_service_group(self):
+        response = self.client.get("/api/v1/servicegroup")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, '[]')
+
+        response = self.client.post("/api/v1/servicegroup",
+                                    '{ "name": "SG1", "alias": "SG1_alias" }',
+                                    content_type="application/json",
+                                    )
+
+        self.assertEquals(response.status_code, 201)
+
+        response = self.client.get("/api/v1/servicegroup")
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["name"], "SG1")
+        self.assertEquals(data[0]["alias"], "SG1_alias")
+
+        service = Service.objects.create(description="smember",
+                                         base_service="base_service",
+                                         check_command="okok")
+
+        response = self.client.patch("/api/v1/servicegroup",
+                                     ('{ "group": "SG1", '
+                                      '"service": "smember" }'))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "")
+
+        servicegroup = ServiceGroup.objects.get(name="SG1")
+        self.assertEquals(len(servicegroup.services.all()), 1)
+        self.assertEquals(servicegroup.services.all()[0].description,
+                          "smember")
+
+        service.delete()
+
+        servicegroup.delete()
+
+    def test_contact_group(self):
+        response = self.client.get("/api/v1/contactgroup")
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, '[]')
+
+        response = self.client.post("/api/v1/contactgroup",
+                                    '{ "name": "CG1" }',
+                                    content_type="application/json",
+                                    )
+
+        self.assertEquals(response.status_code, 201)
+
+        response = self.client.get("/api/v1/contactgroup")
+        self.assertEquals(response.status_code, 200)
+
+        data = json.loads(response.content)
+        self.assertEquals(len(data), 1)
+        self.assertEquals(data[0]["name"], "CG1")
+
+        contact = Contact.objects.create(name="cmember",
+                                         email="xm@example.com",
+                                         )
+
+        response = self.client.patch("/api/v1/contactgroup",
+                                     ('{ "group": "CG1", '
+                                      '"contact": "cmember" }'))
+
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.content, "")
+
+        contactgroup = ContactGroup.objects.get(name="CG1")
+        self.assertEquals(len(contactgroup.members.all()), 1)
+        self.assertEquals(contactgroup.members.all()[0].name,
+                          "cmember")
+
+        contact.delete()
+
+        contactgroup.delete()
 
     @override_settings(NAGIOS_RESTART_COMMAND="")
     def test_deploy(self):
