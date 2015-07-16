@@ -89,7 +89,7 @@ define hostgroup {
 
 
 def get_servicegroup_definition(sg):
-    if not sg:
+    if not sg.services.all():
         return ""
 
     return """

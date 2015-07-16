@@ -252,7 +252,7 @@ def service_group(request):
             group = ServiceGroup.objects.get(name=groupname)
             service = Service.objects.get(description=servicename)
 
-            group.hosts.add(service)
+            group.services.add(service)
 
             return HttpResponse("")
 
