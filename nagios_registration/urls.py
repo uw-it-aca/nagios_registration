@@ -3,7 +3,7 @@ import nagios_registration.views as views
 
 urlpatterns = patterns(
     'nagios_registration.views',
-    url('^api/v1/host$', views.host),
+    url('^api/v1/host/?(?P<hostname>[a-z0-9\-\_\.]+)?$', views.host),
     url('^api/v1/hostgroup$', views.host_group),
     url('^api/v1/servicegroup$', views.service_group),
     url('^api/v1/service$', views.service),
