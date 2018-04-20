@@ -1,0 +1,19 @@
+html, body {
+    font-family: 'PT Sans', sans-serif;
+}
+
+#search {
+    height: 35px;
+    margin: 10px 15px 10px 0px;
+    /*min-width: 300px;*/
+    width:100%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+#host_box {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 5px;
+}

@@ -1,29 +1,31 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "host_list_template" %}
 
-<ul>
-{{#each hosts}}
-<li>{{name}}, address: {{ address }}
-    <br>
-    Contact Groups: {{ contact_groups }}
-    <br>
-    Services:
-    <ul>
-        {{#each services}}
-            <li>{{ description }}
-                <br>{{ base_service }}, {{ check_command }}, {{ contact_groups }}
-            </li>
-        {{/each}}
-    </ul>
-    <br >
-    Host Groups:
-    <ul>
-        {{#each host_groups}}
-            <li>{{ alias }} ({{ name }})</li>
-        {{/each}}
-    </ul>
-</li>
-{{/each}}
-</ul>
+<div>
+    {{#each hosts}}
+    <div id="host_box">
+        <h2> {{name}}, address: {{ address }} </h2>
+        Contact Groups: {{ contact_groups }}
+        <br>
+        Services:
+        <ul>
+            {{#each services}}
+                <li>
+                    {{ description }}
+                    <br>
+                    {{ base_service }}, {{ check_command }}, {{ contact_groups }}
+                </li>
+            {{/each}}
+        </ul>
+        <br >
+        Host Groups:
+        <ul>
+            {{#each host_groups}}
+                <li>{{ alias }} ({{ name }})</li>
+            {{/each}}
+        </ul>
+    </div>
+    {{/each}}
+</div>
 
 {% endtplhandlebars %}
