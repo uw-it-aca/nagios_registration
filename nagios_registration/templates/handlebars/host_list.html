@@ -4,7 +4,9 @@
 <div>
     {{#each hosts}}
     <div id="host_box">
-        <h2> {{name}}, address: {{ address }} </h2>
+        <div id="host_info">
+            <h2> {{name}}, address: {{ address }} </h2>
+        </div>
         Contact Groups: {{ contact_groups }}
         <br>
         Services:
@@ -17,7 +19,6 @@
                 </li>
             {{/each}}
         </ul>
-        <br >
         Host Groups:
         <ul>
             {{#each host_groups}}
