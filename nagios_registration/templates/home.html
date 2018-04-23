@@ -7,13 +7,27 @@
         {% include "head.html" %}
     </head>
     <body>
+        <!-- set up the modal to start hidden and fade in and out -->
+        <div id="myModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- dialog body -->
+              <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                Hello world!
+              </div>
+              <!-- dialog buttons -->
+              <div class="modal-footer"><button type="button" class="btn btn-primary">OK</button></div>
+            </div>
+          </div>
+        </div>
+
         <h1> Nagios Stuff </h1>
 
         <input type="text" id="search" placeholder="Search...">
         <br>
 
         <div id="hosts"> Loading... </div>
-
         {% include "handlebars/host_list.html" %}
         <script>
             var base_url = "{{ base_url }}";

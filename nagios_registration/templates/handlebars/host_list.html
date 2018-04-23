@@ -5,26 +5,29 @@
     {{#each hosts}}
     <div id="host_box">
         <div id="host_info">
-            <h2> {{name}}, address: {{ address }} </h2>
+            <h2> {{name}} | {{ address }} </h2>
+            <i id="delete_icon" class="material-icons">delete</i>
         </div>
-        Contact Groups: {{ contact_groups }}
-        <br>
-        Services:
-        <ul>
-            {{#each services}}
-                <li>
-                    {{ description }}
-                    <br>
-                    {{ base_service }}, {{ check_command }}, {{ contact_groups }}
-                </li>
-            {{/each}}
-        </ul>
-        Host Groups:
-        <ul>
-            {{#each host_groups}}
-                <li>{{ alias }} ({{ name }})</li>
-            {{/each}}
-        </ul>
+        <div id="other_info">
+            Contact Groups: {{ contact_groups }}
+            <br>
+            Services:
+            <ul>
+                {{#each services}}
+                    <li>
+                        {{ description }}
+                        <br>
+                        {{ base_service }}, {{ check_command }}, {{ contact_groups }}
+                    </li>
+                {{/each}}
+            </ul>
+            Host Groups:
+            <ul>
+                {{#each host_groups}}
+                    <li>{{ alias }} ({{ name }})</li>
+                {{/each}}
+            </ul>
+        </div>
     </div>
     {{/each}}
 </div>
