@@ -20,6 +20,7 @@
             }
             console.log(data);
             $("#hosts").html(tmpl({ hosts: hosts, host_groups: data }));
+
         }
     });
 })(jQuery);

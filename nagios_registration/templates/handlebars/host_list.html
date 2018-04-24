@@ -6,7 +6,7 @@
     <div id="host_box">
         <div id="host_info">
             <h2> {{name}} | {{ address }} </h2>
-            <i id="delete_icon" class="material-icons">delete</i>
+            <i id="delete_icon" class="material-icons" data-toggle="modal" data-target="#delHostModal"data-host="{{ name }}">delete</i>
         </div>
         <div id="other_info">
             Contact Groups: {{ contact_groups }}
