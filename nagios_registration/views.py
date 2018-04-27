@@ -423,6 +423,7 @@ def home(request):
 
 @login_required
 def ui_data(request):
+    print "ui_data"
     hosts = Host.objects.filter(is_active=True)
 
     host_list = []
@@ -442,3 +443,22 @@ def ui_data(request):
         host_list.append(host_data)
 
     return HttpResponse(json.dumps(host_list), content_type="application/json")
+
+
+@login_required
+def ui_host(request, hostname):
+    try:
+        host = Host.objects.get(name=hostname)
+        # delete
+        host.delete()
+
+        response = HttpResponse(json.dumps(host.json_data()),
+                                content_type="application/json")
+
+    except Host.DoesNotExist:
+        response = HttpResponse("Not Found", status=404)
+
+    except Exception as ex:
+        response = HttpResponse(ex, status=500)
+
+    return response
