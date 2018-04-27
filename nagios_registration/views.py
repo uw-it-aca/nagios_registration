@@ -85,7 +85,7 @@ def host(request, hostname=None):
 
     def _delete(request, hostname):
         try:
-            host = Host.objects.get(address=hostname)
+            host = Host.objects.get(name=hostname)
             host.delete()
 
             response = HttpResponse(json.dumps(host.json_data()),
@@ -423,7 +423,6 @@ def home(request):
 
 @login_required
 def ui_data(request):
-    print "ui_data"
     hosts = Host.objects.filter(is_active=True)
 
     host_list = []
