@@ -20,7 +20,7 @@
               </div>
               <!-- dialog body -->
               <div class="modal-body">
-                <h5> Note: if you delete a host, all the services will be deleted as well. </h5>
+                <h5> Note: if you delete a host, all the services that are assigned to this host will be deleted as well. </h5>
               </div>
               <!-- dialog buttons -->
               <div class="modal-footer">
@@ -32,8 +32,9 @@
         </div>
 
         <h1> Nagios Stuff </h1>
-
-        <input type="text" id="search" placeholder="Search...">
+        <div id="search_bar">
+          <input type="text" id="search" placeholder="Search...">
+        </div> 
         <br>
 
         <div id="hosts"> Loading... </div>

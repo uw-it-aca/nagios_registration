@@ -9,24 +9,23 @@
             <i id="delete_icon" class="material-icons" data-toggle="modal" data-target="#delHostModal"data-host="{{ name }}">delete</i>
         </div>
         <div id="other_info">
-            Contact Groups: {{ contact_groups }}
+            {{#each host_groups}}
+                <div id="host_group"> {{ alias }} ({{ name }})</div>
+            {{/each}}
+            {{#if contact_groups}}
+                <h5> Contact Groups: {{ contact_groups }} </h5>
+            {{/if}}
             <br>
-            Services:
-            <ul>
+            {{#if services}}
+            <h5> Services: </h5>
                 {{#each services}}
-                    <li>
-                        {{ description }}
-                        <br>
+                    <button class="accordion"> {{ description }} </button>
+                    <div class="panel">
                         {{ base_service }}, {{ check_command }}, {{ contact_groups }}
-                    </li>
+                    </div>
                 {{/each}}
-            </ul>
-            Host Groups:
-            <ul>
-                {{#each host_groups}}
-                    <li>{{ alias }} ({{ name }})</li>
-                {{/each}}
-            </ul>
+            {{/if}}
+
         </div>
     </div>
     {{/each}}
