@@ -6,7 +6,7 @@
     <div id="host_box">
         <div id="host_info">
             <h2> {{name}} | {{ address }} </h2>
-            <i id="delete_icon" class="material-icons" data-toggle="modal" data-target="#delHostModal"data-host="{{ name }}">delete</i>
+            <i id="delete_icon" class="material-icons" data-toggle="modal" data-target="#delHostModal" data-host="{{ name }}">delete</i>
         </div>
         <div id="other_info">
             {{#each host_groups}}
@@ -19,7 +19,9 @@
             {{#if services}}
             <h5> Services: </h5>
                 {{#each services}}
-                    <button class="accordion"> {{ description }} </button>
+                    <button class="accordion"> {{ description }} 
+                        <i id="delete_icon" class="material-icons" data-toggle="modal" data-target="#delServiceModal" data-service="{{ description }}" data-host="{{ ../../name }}">clear</i>
+                    </button>
                     <div class="panel">
                         {{ base_service }}, {{ check_command }}, {{ contact_groups }}
                     </div>
