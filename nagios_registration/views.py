@@ -172,7 +172,7 @@ def host_group(request):
 
 @csrf_exempt
 @authenticate_application
-def service(request):
+def service(request, hostname=None, servicename=None):
     def _get(request):
         services = Service.objects.all()
         services_list = []
@@ -236,6 +236,19 @@ def service(request):
             response.status_code = 500
             return response
 
+    def _delete(request, hostname, servicename):
+        try:
+            service = Service.objects.get(description=servicename)
+            host = Host.objects.get(name=hostname)
+            service.hosts.remove(host)
+            return HttpResponse("")
+
+        except Exception as ex:
+            print "Err: ", ex
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
     if request.method == "GET":
         return _get(request)
 
@@ -244,6 +257,9 @@ def service(request):
 
     if request.method == "PATCH":
         return _patch(request)
+
+    if request.method == "DELETE":
+        return _delete(request, hostname, servicename)
 
 
 @csrf_exempt
