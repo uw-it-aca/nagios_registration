@@ -16,7 +16,7 @@ $("#delServiceModal").on("show.bs.modal", function(event) {
     var host = trigger.data('host');
     var service = trigger.data('service');
     var modal = $(this);
-    modal.find('.modal-title').text('Are you sure you want to delete: ' + service + ' from ' + host + '?');
+    modal.find('.modal-title').html('Are you sure you want to delete: <code>' + service + '</code> from <code>' + host + '</code>?');
 
     $("#delServiceConfirm").on("click", function(e) {
         console.log("DELETING SERVICE");
@@ -40,7 +40,7 @@ $("#delHostModal").on("show.bs.modal", function(event) {
     var trigger = $(event.relatedTarget);
     var host = trigger.data('host');
     var modal = $(this);
-    modal.find('.modal-title').text('Are you sure you want to delete: ' + host + '?');
+    modal.find('.modal-title').html('Are you sure you want to delete: <code>' + host + '</code>?');
 
     $("#delHostConfirm").on("click", function(e) {
         // Ajax call here
@@ -65,4 +65,10 @@ $("#delHostModal").on("hide.bs.modal", function() {
 $("#delServiceModal").on("hide.bs.modal", function() {
     $("#delServiceConfirm").off("click");
 });
+
+// We don't want to trigger the button collapse logic... just the delete logic
+ $(document).on('click','#delete_icon',function(e) {
+    e.stopPropagation();
+ });
+
 

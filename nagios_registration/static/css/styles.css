@@ -18,7 +18,7 @@ h2 {
     border-bottom-left-radius: 0px;
 }
 
-#host_box {
+.host_box {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin: 5px 50px;
@@ -30,7 +30,7 @@ input[type="text"] {
     font-size: 18px;
 }
 
-#host_info {
+.host_info {
     background-color: #C3DBC5;
     margin: 0px;
     vertical-align: middle;
@@ -38,7 +38,7 @@ input[type="text"] {
     border-radius: 2px;
 }
 
-#host_info, #other_info {
+.host_info, .other_info {
     padding: 10px;
 }
 
@@ -55,7 +55,7 @@ input[type="text"] {
     margin: 0px 30px;
 }
 
-#host_group {
+.host_group {
     display: inline-block;
     background: #FDFBF3;
     border-radius: 3px;
@@ -68,11 +68,19 @@ input[type="text"] {
     padding: 0px;
 }
 
+.card-body {
+    padding: 0.2rem 0.8rem;
+}
+
+.card-body p {
+    margin: 0rem;
+}
+
 #service {
     width: 100%;
     text-align: left;
 }
 
-#label {
+.label {
     margin: 4px;
 }
