@@ -7,73 +7,7 @@ $("#search").on("keyup", function() {
     console.log("Alert");
 });
 
-
-$("#delHostModal").modal({
-  "backdrop"  : "static",
-  "keyboard"  : true,
-  "show"      : false,
-});
-
-$("#delServiceModal").modal({
-  "backdrop"  : "static",
-  "keyboard"  : true,
-  "show"      : false,
-});
-
-$("#delServiceModal").on("show.bs.modal", function(event) {
-    var trigger = $(event.relatedTarget);
-    var host = trigger.data('host');
-    var service = trigger.data('service');
-    var modal = $(this);
-    modal.find('.modal-title').text('Are you sure you want to delete: ' + service + ' from ' + host + '?');
-    console.log("service");
-
-    $("#delServiceConfirm").on("click", function(e) {
-        console.log("DELETING SERVICE");
-        // Ajax call here
-        $.ajax({
-            url: "/api/v1/service/" + host + "/" + service,
-            type: 'DELETE',
-            success: function(data) {
-                // Load in the data again (refresh the hosts)
-                loadData();
-            }
-        }).fail(function(data) {
-            alert("FAILURE");
-        });
-        $("#delServiceModal").modal('hide');
-    });
-});
-
-
-$("#delHostModal").on("show.bs.modal", function(event) {
-    var trigger = $(event.relatedTarget);
-    var host = trigger.data('host');
-    var modal = $(this);
-    modal.find('.modal-title').text('Are you sure you want to delete: ' + host + '?');
-
-    $("#deleteConfirm").on("click", function(e) {
-        // Ajax call here
-        $.ajax({
-            url: "/api/v1/host/" + host,
-            type: 'DELETE',
-            success: function(data) {
-                // Load in the data again (refresh the hosts)
-                loadData();
-            }
-        }).fail(function(data) {
-            alert("FAILURE");
-        });
-        $("#delHostModal").modal('hide');
-    });
-});
-
-var acc = $(".accordion");
-console.log(acc);
-console.log(acc[0]);
-var i;
-
-for (i = 0; i < acc.length; i++) {
+for (var i = 0; i < $(".accordion").length; i++) {
     acc[i].addEventListener("click", function() {
         /* Toggle between adding and removing the "active" class,
         to highlight the button that controls the panel */
@@ -88,7 +22,9 @@ for (i = 0; i < acc.length; i++) {
         }
     });
 }
-//
-$("#delHostModal").on("hide.bs.modal", function() {
-    $("#deleteConfirm").off("click");
+
+$("#delete_icon").on("click", function(e) {
+    console.log("here");
+    e.preventDefault();
 });
+console.log($("#delete_icon"));

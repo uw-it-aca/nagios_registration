@@ -147,6 +147,9 @@ class TestViews(TestCase):
         services = Service.objects.all()
         self.assertEquals(len(services.all()), 1)
 
+        service = Service.objects.get(description="test service")
+        service.delete()
+
     def test_host_group(self):
         response = self.client.get("/api/v1/hostgroup")
         self.assertEquals(response.status_code, 200)
@@ -252,6 +255,43 @@ class TestViews(TestCase):
 
         host.delete()
 
+        service.delete()
+
+    def test_delete_service(self):
+        host = Host.objects.create(name="T1", address="address")
+        response = self.client.post("/api/v1/service",
+                                    json.dumps({
+                                        "base_service": "24x7",
+                                        "description": "test service",
+                                        "check_command": "!!something.py!80",
+                                        "contact_groups": "admins, yousall",
+                                    }),
+                                    content_type="application/json",
+                                    )
+        self.assertEquals(response.status_code, 201)
+        services = Service.objects.filter(hosts=host)
+        self.assertEquals(len(services.all()), 0)
+
+        response = self.client.patch("/api/v1/service",
+                                     json.dumps({"service": "test service",
+                                                 "host": "T1",
+                                                 }))
+        self.assertEquals(response.status_code, 200)
+        services = Service.objects.filter(hosts=host)
+        self.assertEquals(len(services.all()), 1)
+
+        response = self.client.delete("/api/v1/service/T1/test service")
+        self.assertEquals(response.status_code, 200)
+
+        # Assert that the service is not connected to host
+        services = Service.objects.filter(hosts=host)
+        self.assertEquals(len(services.all()), 0)
+
+        # Assert that the service still exists...
+        service = Service.objects.filter(description="test service")
+        self.assertEquals(len(service.all()), 1)
+
+        host.delete()
         service.delete()
 
     def test_contact(self):
