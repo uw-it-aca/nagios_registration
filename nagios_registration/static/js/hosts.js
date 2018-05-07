@@ -21,19 +21,6 @@ function loadData() {
             console.log(data);
             $("#hosts").html(tmpl({ hosts: hosts, host_groups: data }));
 
-            // Logic for the services accordion
-            var acc = $(".accordion");
-            for (var i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function() {
-                    this.classList.toggle("active");
-                    var panel = this.nextElementSibling;
-                    if (panel.style.display === "block") {
-                        panel.style.display = "none";
-                    } else {
-                        panel.style.display = "block";
-                    }
-                });
-            }
         }
     });
 }

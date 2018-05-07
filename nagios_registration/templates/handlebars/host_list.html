@@ -13,24 +13,37 @@
                 <div id="host_group"> {{ alias }} ({{ name }})</div>
             {{/each}}
             {{#if contact_groups}}
-                <h5> Contact Groups: {{ contact_groups }} </h5>
+                <h5 id="label"> Contact Groups: {{ contact_groups }} </h5>
             {{/if}}
             <br>
             {{#if services}}
-            <h5> Services: </h5>
+            <h5 id="label"> Services: </h5>
+            <div id="accordion">
                 {{#each services}}
-                    <button class="accordion"> {{ description }} 
-                        <i id="delete_icon" class="material-icons" data-toggle="modal" data-target="#delServiceModal" data-service="{{ description }}" data-host="{{ ../../name }}">clear</i>
-                    </button>
-                    <div class="panel">
-                        {{ base_service }}, {{ check_command }}, {{ contact_groups }}
+                <div class="card">
+                    <div class="card-header" id="heading{{@../index}}-{{@index}}">
+                        <h5 class="mb-0">
+                            <button id="service" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse{{@../index}}-{{@index}}" aria-expanded="false" aria-controls="collapse{{@../index}}-{{@index}}">
+                                {{ description }} 
+                                <i id="delete_icon" class="material-icons" data-toggle="modal" data-target="#delServiceModal" data-service="{{ description }}" data-host="{{ ../../name }}">clear</i>
+                            </button>
+                        </h5>
                     </div>
+                    <div id="collapse{{@../index}}-{{@index}}" class="collapse" aria-labelledby="heading{{@../index}}-{{@index}}" data-parent="#accordion">
+                        <div class="card-body">
+                            {{ base_service }}, {{ check_command }}, {{ contact_groups }}
+                        </div>
+                    </div>
+                </div>
                 {{/each}}
+            </div>
             {{/if}}
 
         </div>
     </div>
     {{/each}}
 </div>
+
+
 
 {% endtplhandlebars %}

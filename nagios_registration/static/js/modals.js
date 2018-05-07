@@ -17,7 +17,6 @@ $("#delServiceModal").on("show.bs.modal", function(event) {
     var service = trigger.data('service');
     var modal = $(this);
     modal.find('.modal-title').text('Are you sure you want to delete: ' + service + ' from ' + host + '?');
-    console.log("service");
 
     $("#delServiceConfirm").on("click", function(e) {
         console.log("DELETING SERVICE");

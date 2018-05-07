@@ -7,24 +7,7 @@ $("#search").on("keyup", function() {
     console.log("Alert");
 });
 
-for (var i = 0; i < $(".accordion").length; i++) {
-    acc[i].addEventListener("click", function() {
-        /* Toggle between adding and removing the "active" class,
-        to highlight the button that controls the panel */
-        this.classList.toggle("active");
-
-        /* Toggle between hiding and showing the active panel */
-        var panel = this.nextElementSibling;
-        if (panel.style.display === "block") {
-            panel.style.display = "none";
-        } else {
-            panel.style.display = "block";
-        }
-    });
-}
-
-$("#delete_icon").on("click", function(e) {
-    console.log("here");
-    e.preventDefault();
-});
-console.log($("#delete_icon"));
+// We don't want to trigger the button collapse logic... just the delete logic
+ $(document).on('click','#delete_icon',function(e) {
+    e.stopPropagation();
+ });
