@@ -13,9 +13,8 @@
                 <div class="host_group"> {{ alias }} ({{ name }})</div>
             {{/each}}
             {{#if contact_groups}}
-                <h5 class="label"> Contact Groups: {{ contact_groups }} </h5>
+                <h5 class="label"> Contact Groups: <span class="highlight"> {{ contact_groups }} </span> </h5>
             {{/if}}
-            <br>
             {{#if services}}
             <h5 class="label"> Services: </h5>
             <div id="accordion">
@@ -31,8 +30,8 @@
                     </div>
                     <div id="collapse{{@../index}}-{{@index}}" class="collapse" aria-labelledby="heading{{@../index}}-{{@index}}" data-parent="#accordion">
                         <div class="card-body">
-                            <p> <code> Base Service: </code> {{ base_service }} </p>
-                            <p> <code> Check Command: </code> {{ check_command }} </p>
+                            <p class="code"> <code> Base Service: </code> {{ base_service }} </p>
+                            <p class="code"> <code> Check Command: </code> {{ check_command }} </p>
                             {{#if contact_groups}}
                                 <p> <code> Contact Groups: </code> {{ contact_groups }} </p>
                             {{/if}}
