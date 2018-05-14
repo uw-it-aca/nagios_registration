@@ -19,7 +19,6 @@ $("#delServiceModal").on("show.bs.modal", function(event) {
     modal.find('.modal-title').html('Are you sure you want to delete: <code>' + service + '</code> from <code>' + host + '</code>?');
 
     $("#delServiceConfirm").on("click", function(e) {
-        console.log("DELETING SERVICE");
         // Ajax call here
         $.ajax({
             url: "/api/v1/service/" + host + "/" + service,
