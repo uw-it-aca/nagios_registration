@@ -24,7 +24,7 @@ class TestFile(TestCase):
         self.assertRegexpMatches(
             generate_configuration(),
             (r"host_name\s+find_me\s+address\s+127.7.2.1\s+"
-             "contact_groups\s+g1, g2\s+}"))
+             r"contact_groups\s+g1, g2\s+}"))
 
         host.is_active = False
         host.save()
@@ -171,7 +171,7 @@ class TestFile(TestCase):
         self.assertRegexpMatches(
             config,
             (r"define contactgroup {\s+contactgroup_name\s+contact_group1\s+"
-             "members\s+c1, c2"))
+             r"members\s+c1, c2"))
 
         self.assertRegexpMatches(
             config,
