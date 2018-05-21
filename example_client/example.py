@@ -47,12 +47,12 @@ check_command = "check_remote!disk_check.py!98!99"
 # Create the 2 hosts
 client.request("%s/api/v1/host" % (registration_server),
                method='POST',
-               body=json.dumps({"name": hostname1, "address": address1}),
+               body=json.dumps({"name": hostname1, "address": address1, "contact_groups": ""}),
                headers={"Content-Type": "application/json"})
 
 client.request("%s/api/v1/host" % (registration_server),
                method='POST',
-               body=json.dumps({"name": hostname2, "address": address2}),
+               body=json.dumps({"name": hostname2, "address": address2, "contact_groups": ""}),
                headers={"Content-Type": "application/json"})
 
 # Create the hostgroup

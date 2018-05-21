@@ -1,13 +1,66 @@
-Hosts:
-<div id="hosts">
-Loading...
-</div>
+{% load staticfiles %}
 
-{% include "handlebars/host_list.html" %}
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title> Nagios Registration </title>
+        {% include "head.html" %}
+    </head>
+    <body>
+        <!-- set up the modal to start hidden and fade in and out -->
+        <div id="delHostModal" class="modal fade" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>              
+              </div>
+              <!-- dialog body -->
+              <div class="modal-body">
+                <p> Note: if you delete a host, all the services that are assigned to this host will be deleted as well. </p>
+              </div>
+              <!-- dialog buttons -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="delHostConfirm" class="btn btn-danger">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-<script>
-    var base_url = "{{ base_url }}";
-</script>
-<script src="{{STATIC_URL}}js/vendor/jquery-2.1.1.min.js"></script>
-<script src="{{STATIC_URL}}js/vendor/handlebars-v2.0.0.js"></script>
-<script src="{{STATIC_URL}}js/hosts.js"></script>
+        <div id="delServiceModal" class="modal fade" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title"> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <!-- dialog buttons -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="delServiceConfirm" class="btn btn-danger">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1 id="header"> Nagios Stuff </h1>
+
+        <div id="search_bar">
+          <input type="text" id="search" placeholder="Search...">
+        </div>
+
+        <div id="hosts"> Loading... </div>
+        {% include "handlebars/host_list.html" %}
+        <script>
+            var base_url = "{{ base_url }}";
+        </script>
+        <script src="{% static "js/vendor/handlebars-v2.0.0.js" %}"></script>
+        <script src="{% static "js/hosts.js" %}"></script>
+        <script src="{% static "js/search.js" %}"></script>
+        <script src="{% static "js/modals.js" %}"></script>
+    </body>
+</html>
