@@ -1,3 +1,2 @@
-Django==1.8
-django-oauth-plus
-django-templatetag-handlebars==1.3.0
+-e .
+-e git+https://github.com/edx/django-oauth-plus#egg=django-oauth-plus
