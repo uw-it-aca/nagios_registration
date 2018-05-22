@@ -1,5 +1,5 @@
-[![Build Status](https://api.travis-ci.org/vegitron/nagios_registration.svg?branch=master)](https://travis-ci.org/vegitron/nagios_registration)
-[![Coverage Status](https://img.shields.io/coveralls/vegitron/nagios_registration.svg)](https://coveralls.io/r/vegitron/nagios_registration?branch=master)
+[![Build Status](https://api.travis-ci.org/uw-it-aca/nagios_registration.svg?branch=master)](https://travis-ci.org/uw-it-aca/nagios_registration)
+[![Coverage Status](https://img.shields.io/coveralls/uw-it-aca/nagios_registration.svg)](https://coveralls.io/r/uw-it-aca/nagios_registration?branch=master)
 
 # Nagios Registration
 ===================
@@ -11,4 +11,4 @@ If you have a large number of servers you manage through a deployment system (su
 * Adding services
 * Assigning services to hosts
 
-For installation information, [read this](https://github.com/vegitron/nagios_registration/wiki/Installation).  For information about how this app interacts with the rest of your Nagios infrastructure, [read this](https://github.com/vegitron/nagios_registration/wiki/Nagios-Configuration-Files)
+For installation information, [read this](https://github.com/uw-it-aca/nagios_registration/wiki/Installation).  For information about how this app interacts with the rest of your Nagios infrastructure, [read this](https://github.com/uw-it-aca/nagios_registration/wiki/Nagios-Configuration-Files)
