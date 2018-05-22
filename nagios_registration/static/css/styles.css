@@ -1,0 +1,114 @@
+html, body {
+    font-family: 'PT Sans', sans-serif;
+}
+
+h2 {
+    padding: 0px;
+    margin: 0px;
+    display: inline;
+}
+
+#search {
+    height: 35px;
+    margin: 10px auto;
+    /*min-width: 300px;*/
+    padding: 6px 12px;
+    width:100%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.host_box {
+    border: 1px solid #888;
+    border-radius: 4px;
+    margin: 5px 50px;
+    box-shadow: 0px 1px 1px #888;
+    position: relative;
+}
+
+input[type="text"] {
+    font-size: 18px;
+}
+
+.host_info {
+    background-color: #C3DBC5;
+    margin: 0px;
+    vertical-align: middle;
+    border-bottom: 1px solid #888;
+    border-radius: 2px;
+}
+
+.host_info, .other_info {
+    padding: 10px;
+}
+
+#delete_icon {
+    float: right;
+}
+
+#delete_icon:hover {
+    cursor: pointer;
+    color: #e60000;
+}
+
+#search_bar {
+    margin: 0px 30px;
+}
+
+.host_group {
+    display: inline-block;
+    background: #FDFBF3;
+    border-radius: 3px;
+    padding: 4px;
+    box-shadow: 0px 1px 1px #ccc;
+    border: 1px solid #212b33;
+}
+
+.card-header {
+    padding: 0px;
+}
+
+.card-body {
+    padding: 0.2rem 0.8rem;
+}
+
+.card-body p {
+    margin: 0rem;
+}
+
+#service {
+    width: 100%;
+    text-align: left;
+}
+
+.label {
+    margin: 4px;
+}
+
+.highlight {
+    color: #420039;
+    font-size: 1.1rem;
+}
+
+#header {
+    padding: 5px;
+}
+
+.btn-link {
+    color: black;
+    font-size: 1.1rem;
+}
+
+.btn-link:hover {
+    color: teal;
+}
+
+.code {
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    font-size: 0.95rem;
+    padding: 2px;
+}
+
+code {
+    font-size: 100%;
+}

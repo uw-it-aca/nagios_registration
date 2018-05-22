@@ -46,7 +46,7 @@ def deploy(request):
 
 @csrf_exempt
 @authenticate_application
-def host(request):
+def host(request, hostname=None):
     def _get(request):
         hosts = Host.objects.filter(is_active=True)
         host_list = []
@@ -83,11 +83,30 @@ def host(request):
             response.status_code = 500
             return response
 
+    def _delete(request, hostname):
+        try:
+            host = Host.objects.get(name=hostname)
+            host.delete()
+
+            response = HttpResponse(json.dumps(host.json_data()),
+                                    content_type="application/json")
+
+        except Host.DoesNotExist:
+            response = HttpResponse("Not Found", status=404)
+
+        except Exception as ex:
+            response = HttpResponse(ex, status=500)
+
+        return response
+
     if request.method == "GET":
         return _get(request)
 
-    if request.method == "POST":
+    elif request.method == "POST":
         return _post(request)
+
+    elif request.method == "DELETE":
+        return _delete(request, hostname)
 
 
 @csrf_exempt
@@ -153,7 +172,7 @@ def host_group(request):
 
 @csrf_exempt
 @authenticate_application
-def service(request):
+def service(request, hostname=None, servicename=None):
     def _get(request):
         services = Service.objects.all()
         services_list = []
@@ -217,6 +236,19 @@ def service(request):
             response.status_code = 500
             return response
 
+    def _delete(request, hostname, servicename):
+        try:
+            service = Service.objects.get(description=servicename)
+            host = Host.objects.get(name=hostname)
+            service.hosts.remove(host)
+            return HttpResponse("")
+
+        except Exception as ex:
+            print "Err: ", ex
+            response = HttpResponse(ex)
+            response.status_code = 500
+            return response
+
     if request.method == "GET":
         return _get(request)
 
@@ -225,6 +257,9 @@ def service(request):
 
     if request.method == "PATCH":
         return _patch(request)
+
+    if request.method == "DELETE":
+        return _delete(request, hostname, servicename)
 
 
 @csrf_exempt
