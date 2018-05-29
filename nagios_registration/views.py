@@ -1,8 +1,6 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.template import RequestContext
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from nagios_registration.models import Host, HostGroup, Service, ServiceGroup
 from nagios_registration.models import Contact, ContactGroup
@@ -437,6 +435,4 @@ def contact_group(request):
 
 @group_required(settings.NAGIOS_ADMIN_GROUP)
 def home(request):
-    return render_to_response("home.html", {
-        "base_url": reverse("nagios_registration_home"),
-    }, RequestContext(request))
+    return render(request, "home.html", {})
