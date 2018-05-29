@@ -16,6 +16,7 @@ setup(
     install_requires = [
         'Django==1.11.10',
         'django-templatetag-handlebars==1.3.0',
+        'UW-Django-SAML2>=0.4.2',
     ],
     license='Apache License, Version 2.0',
     description='An application that registers hosts for Nagios monitoring',
