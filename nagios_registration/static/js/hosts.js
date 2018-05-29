@@ -1,5 +1,5 @@
 function loadData() {
-    $.ajax(base_url + "/api/v1/host", {
+    $.ajax("/api/v1/host", {
         success: function(hosts) {
             var hostlist_source = $("#host_list_template").html();
             var tmpl = Handlebars.compile(hostlist_source);
