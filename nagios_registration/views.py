@@ -3,14 +3,12 @@ from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from nagios_registration.models import Host, HostGroup, Service, ServiceGroup
 from nagios_registration.models import Contact, ContactGroup
-from nagios_registration.auth import authenticate_application
+from nagios_registration.auth import authenticate_application, group_required
 from nagios_registration.util import generate_configuration
 import json
-from oauth_provider.decorators import oauth_required
 import os
 
 
@@ -48,13 +46,29 @@ def deploy(request):
 @authenticate_application
 def host(request, hostname=None):
     def _get(request):
-        hosts = Host.objects.filter(is_active=True)
-        host_list = []
-        for host in hosts:
-            host_list.append(host.json_data())
+        if hostname is None:
+            host_list = []
+            for host in Host.objects.filter(is_active=True).order_by('name'):
+                host_data = host.json_data()
+                host_data["services"] = []
+                host_data["host_groups"] = []
 
-        return HttpResponse(json.dumps(host_list),
-                            content_type="application/json")
+                services = Service.objects.filter(hosts=host)
+                for service in services:
+                    host_data["services"].append(service.json_data())
+
+                groups = HostGroup.objects.filter(hosts=host)
+                for group in groups:
+                    host_data["host_groups"].append(group.json_data())
+
+                host_list.append(host_data)
+
+            return HttpResponse(json.dumps(host_list),
+                                content_type="application/json")
+        else:
+            host = Host.objects.get(name=hostname)
+            return HttpResponse(json.dumps(host.json_data()),
+                                content_type="application/json")
 
     def _post(request):
         try:
@@ -421,40 +435,8 @@ def contact_group(request):
         return _patch(request)
 
 
-###
-#
-# Methods supporting the web ui
-#
-###
-def redirect_to_home(request):
-    return HttpResponseRedirect(reverse("nagios_registration_home"))
-
-
-@login_required
+@group_required(settings.NAGIOS_ADMIN_GROUP)
 def home(request):
     return render_to_response("home.html", {
         "base_url": reverse("nagios_registration_home"),
     }, RequestContext(request))
-
-
-@login_required
-def ui_data(request):
-    hosts = Host.objects.filter(is_active=True)
-
-    host_list = []
-    for host in hosts:
-        host_data = host.json_data()
-        host_data["services"] = []
-        host_data["host_groups"] = []
-
-        services = Service.objects.filter(hosts=host)
-        for service in services:
-            host_data["services"].append(service.json_data())
-
-        groups = HostGroup.objects.filter(hosts=host)
-        for group in groups:
-            host_data["host_groups"].append(group.json_data())
-
-        host_list.append(host_data)
-
-    return HttpResponse(json.dumps(host_list), content_type="application/json")

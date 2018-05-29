@@ -8,6 +8,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 NAGIOS_CONFIGURATION_FILE = "/tmp/nagios.cfg"
 NAGIOS_RESTART_COMMAND = "/bin/touch /tmp/touched"
+NAGIOS_ADMIN_GROUP = ""
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
@@ -30,6 +31,7 @@ INSTALLED_APPS = (
     'nagios_registration',
     'oauth_provider',
     'templatetag_handlebars',
+    'uw_saml',
 )
 
 MIDDLEWARE_CLASSES = (

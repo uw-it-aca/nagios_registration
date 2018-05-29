@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from nagios_registration.views import (
     host_group, host, service_group, service, contact_group, contact, deploy,
-    ui_data, home)
+    home)
 
 
 urlpatterns = [
@@ -14,6 +14,5 @@ urlpatterns = [
     url(r'^api/v1/contactgroup$', contact_group),
     url(r'^api/v1/contact$', contact),
     url(r'^api/v1/deploy$', deploy),
-    url(r'^ui/api/v1/data', ui_data),
     url(r'^ui', home, name="nagios_registration_home"),
 ]
