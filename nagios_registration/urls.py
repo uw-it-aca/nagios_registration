@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^api/v1/servicegroup$', service_group),
     url(r'^api/v1/service$', service),
     url(r'^api/v1/service/(?P<hostname>[A-Za-z0-9\-\_\.\s]+)/'
-        r'(?P<servicename>[A-Za-z0-9\-\_\.\s]+)?$', service),
+        r'(?P<servicename>[A-Za-z0-9%~\/\-\_\.\s]+)?$', service),
     url(r'^api/v1/contactgroup$', contact_group),
     url(r'^api/v1/contact$', contact),
     url(r'^api/v1/deploy$', deploy),

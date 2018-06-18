@@ -8,6 +8,7 @@ from nagios_registration.auth import authenticate_application, group_required
 from nagios_registration.util import generate_configuration
 import json
 import os
+import urllib
 
 
 ###
@@ -250,6 +251,7 @@ def service(request, hostname=None, servicename=None):
 
     def _delete(request, hostname, servicename):
         try:
+            servicename = urllib.unquote(servicename)
             service = Service.objects.get(description=servicename)
             host = Host.objects.get(name=hostname)
             service.hosts.remove(host)
@@ -318,7 +320,6 @@ def service_group(request):
             group.services.add(service)
 
             return HttpResponse("")
-
         except Exception as ex:
             print "Err: ", ex
             response = HttpResponse(ex)

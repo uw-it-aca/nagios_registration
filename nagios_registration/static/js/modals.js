@@ -21,7 +21,7 @@ $("#delServiceModal").on("show.bs.modal", function(event) {
     $("#delServiceConfirm").on("click", function(e) {
         // Ajax call here
         $.ajax({
-            url: "/api/v1/service/" + host + "/" + service,
+            url: "/api/v1/service/" + host + "/" + encodeURIComponent(service),
             type: 'DELETE',
             success: function(data) {
                 // Load in the data again (refresh the hosts)
