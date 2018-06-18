@@ -10,6 +10,7 @@ import time
 import random
 import urllib
 
+
 class TestViews(TestCase):
     def setUp(self):
         consumer_name = "Test client"
