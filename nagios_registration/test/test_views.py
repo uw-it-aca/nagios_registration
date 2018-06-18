@@ -8,6 +8,7 @@ import json
 import hashlib
 import time
 import random
+import urllib
 
 
 class TestViews(TestCase):
@@ -259,10 +260,11 @@ class TestViews(TestCase):
 
     def test_delete_service(self):
         host = Host.objects.create(name="T1", address="address")
+        service_name = "~test/sample.py"
         response = self.client.post("/api/v1/service",
                                     json.dumps({
                                         "base_service": "24x7",
-                                        "description": "test service",
+                                        "description": service_name,
                                         "check_command": "!!something.py!80",
                                         "contact_groups": "admins, yousall",
                                     }),
@@ -273,14 +275,15 @@ class TestViews(TestCase):
         self.assertEquals(len(services.all()), 0)
 
         response = self.client.patch("/api/v1/service",
-                                     json.dumps({"service": "test service",
+                                     json.dumps({"service": service_name,
                                                  "host": "T1",
                                                  }))
         self.assertEquals(response.status_code, 200)
         services = Service.objects.filter(hosts=host)
         self.assertEquals(len(services.all()), 1)
 
-        response = self.client.delete("/api/v1/service/T1/test service")
+        api = "/api/v1/service/T1/" + urllib.quote(service_name, safe='')
+        response = self.client.delete(api)
         self.assertEquals(response.status_code, 200)
 
         # Assert that the service is not connected to host
@@ -288,7 +291,7 @@ class TestViews(TestCase):
         self.assertEquals(len(services.all()), 0)
 
         # Assert that the service still exists...
-        service = Service.objects.filter(description="test service")
+        service = Service.objects.filter(description=service_name)
         self.assertEquals(len(service.all()), 1)
 
         host.delete()
