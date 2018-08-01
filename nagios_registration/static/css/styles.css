@@ -42,11 +42,11 @@ input[type="text"] {
     padding: 10px;
 }
 
-#delete_icon {
+.delete_icon, .expand_icon {
     float: right;
 }
 
-#delete_icon:hover {
+.delete_icon:hover {
     cursor: pointer;
     color: #e60000;
 }
@@ -76,7 +76,7 @@ input[type="text"] {
     margin: 0rem;
 }
 
-#service {
+.service {
     width: 100%;
     text-align: left;
 }
